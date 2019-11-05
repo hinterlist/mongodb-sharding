@@ -1,0 +1,46 @@
+version: "3"
+services:
+  # Setup shard for Europe region
+  db-eu-region:
+    container_name: db-eu-region
+    image: mongo:3.6.15
+    command: mongod --shardsvr --replSet shardrs1 --dbpath /data/db --port 27017
+    ports:
+      - 27027:27017
+    expose:
+      - 27017
+    volumes:
+      - ./cluster/db-eu:/data/db
+  # Setup shard for United States region
+  db-us-region:
+    container_name: db-us-region
+    image: mongo:3.6.15
+    command: mongod --shardsvr --replSet shardrs1 --dbpath /data/db --port 27017
+    ports:
+      - 27037:27017
+    expose:
+      - 27017
+    volumes:
+      - ./cluster/db-us:/data/db
+
+  # Setup configuration server to store metadata
+  db-cfg:
+    container_name: db-cfg
+    image: mongo:3.6.15
+    command: mongod --configsvr --replSet cfgrs1 --dbpath /data/db --port 27017
+    expose:
+      - 27017
+    volumes:
+      - ./cluster/cfg-us:/data/db
+
+  # Setup router
+  db-router:
+    container_name: db-router
+    image: mongo:3.6.15
+    depends_on:
+      - db-cfg
+    command: mongos --configdb db-cfg/cfgrs1:27017 --port 27017
+    ports:
+      - 27019:27017
+    expose:
+      - 27017
