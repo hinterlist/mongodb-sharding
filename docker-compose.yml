@@ -4,20 +4,21 @@ services:
   db-eu-region:
     container_name: db-eu-region
     image: mongo:3.6.15
-    command: mongod --shardsvr --replSet shardrs1 --dbpath /data/db --port 27017
+    command: mongod --shardsvr --replSet eurs --dbpath /data/db --port 27017
     ports:
-      - 27027:27017
+      - 27037:27017
     expose:
       - 27017
     volumes:
       - ./cluster/db-eu:/data/db
+
   # Setup shard for United States region
   db-us-region:
     container_name: db-us-region
     image: mongo:3.6.15
-    command: mongod --shardsvr --replSet shardrs1 --dbpath /data/db --port 27017
+    command: mongod --shardsvr --replSet usrs --dbpath /data/db --port 27017
     ports:
-      - 27037:27017
+      - 27047:27017
     expose:
       - 27017
     volumes:
@@ -31,7 +32,7 @@ services:
     expose:
       - 27017
     volumes:
-      - ./cluster/cfg-us:/data/db
+      - ./cluster/db-cfg:/data/db
 
   # Setup router
   db-router:
@@ -39,7 +40,7 @@ services:
     image: mongo:3.6.15
     depends_on:
       - db-cfg
-    command: mongos --configdb db-cfg/cfgrs1:27017 --port 27017
+    command: mongos --configdb cfgrs1/db-cfg:27017 --port 27017
     ports:
       - 27019:27017
     expose:
