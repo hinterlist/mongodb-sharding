@@ -40,7 +40,9 @@ services:
     image: mongo:3.6.15
     depends_on:
       - db-cfg
-    command: mongos --configdb cfgrs1/db-cfg:27017 --port 27017
+      - db-eu-region
+      - db-us-region
+    command: mongos --configdb cfgrs1/db-cfg:27017 --port 27017 --bind_ip_all
     ports:
       - 27019:27017
     expose:
