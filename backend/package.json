@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "apollo-server": "^2.9.7",
+    "graphql": "^14.5.8",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.8",
+    "nodemon": "^1.19.4",
+    "pino": "^5.13.5"
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node  ./src/server.js | pino-pretty -c -l"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.0",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "dotenv": "^8.2.0",
+    "pino-pretty": "^3.3.0"
+  }
+}
